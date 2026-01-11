@@ -1,0 +1,10 @@
+# Build artifacts
+.gradle/
+build/
+**/build/
+local.properties
+
+# IDE and OS files
+.idea/
+*.iml
+.DS_Store
