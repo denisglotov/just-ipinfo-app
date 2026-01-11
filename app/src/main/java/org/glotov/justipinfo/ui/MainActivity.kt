@@ -48,7 +48,7 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
   // Scroll to bottom when logs change
   LaunchedEffect(logs) { scrollState.animateScrollTo(scrollState.maxValue) }
 
-  Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+  Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp)) {
     // Buttons Row
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
       Button(onClick = { viewModel.onRequestClicked() }, enabled = !isLoading) {
