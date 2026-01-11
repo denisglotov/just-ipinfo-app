@@ -9,7 +9,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -20,96 +19,76 @@ import org.glotov.justipinfo.data.IpService
 import org.glotov.justipinfo.data.Logger
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        // Manual Dependency Injection
-        val logger = Logger(applicationContext)
-        val ipService = IpService()
-        val repository = AppRepository(ipService, logger)
-        val viewModelFactory = MainViewModelFactory(repository)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        setContent {
-            MaterialTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    MainScreen(viewModelFactory)
-                }
-            }
+    // Manual Dependency Injection
+    val logger = Logger(applicationContext)
+    val ipService = IpService()
+    val repository = AppRepository(ipService, logger)
+    val viewModelFactory = MainViewModelFactory(repository)
+
+    setContent {
+      MaterialTheme {
+        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+          MainScreen(viewModelFactory)
         }
+      }
     }
+  }
 }
 
 @Composable
 fun MainScreen(viewModelFactory: MainViewModelFactory) {
-    val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
-    val logs by viewModel.logs.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val scrollState = rememberScrollState()
+  val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
+  val logs by viewModel.logs.collectAsState()
+  val isLoading by viewModel.isLoading.collectAsState()
+  val scrollState = rememberScrollState()
 
-    // Scroll to bottom when logs change
-    LaunchedEffect(logs) {
-        scrollState.animateScrollTo(scrollState.maxValue)
+  // Scroll to bottom when logs change
+  LaunchedEffect(logs) { scrollState.animateScrollTo(scrollState.maxValue) }
+
+  Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    // Buttons Row
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+      Button(onClick = { viewModel.onRequestClicked() }, enabled = !isLoading) {
+        if (isLoading) {
+          CircularProgressIndicator(
+                  modifier = Modifier.size(16.dp),
+                  strokeWidth = 2.dp,
+                  color = MaterialTheme.colorScheme.onPrimary
+          )
+          Spacer(modifier = Modifier.width(8.dp))
+        }
+        Text("Request")
+      }
+
+      Button(
+              onClick = { viewModel.onClearClicked() },
+              enabled = !isLoading,
+              colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+      ) { Text("Clear") }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Text(text = "Logs:", style = MaterialTheme.typography.titleMedium)
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    // Log Display Area
+    Box(
+            modifier =
+                    Modifier.fillMaxSize()
+                            .background(Color.LightGray.copy(alpha = 0.2f))
+                            .padding(8.dp)
+                            .verticalScroll(scrollState)
     ) {
-        // Buttons Row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(
-                onClick = { viewModel.onRequestClicked() },
-                enabled = !isLoading
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(16.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-                Text("Request")
-            }
-
-            Button(
-                onClick = { viewModel.onClearClicked() },
-                enabled = !isLoading,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-            ) {
-                Text("Clear")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Logs:",
-            style = MaterialTheme.typography.titleMedium
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Log Display Area
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.LightGray.copy(alpha = 0.2f))
-                .padding(8.dp)
-                .verticalScroll(scrollState)
-        ) {
-            Text(
-                text = logs.ifEmpty { "No logs yet." },
-                fontFamily = FontFamily.Monospace,
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
+      Text(
+              text = logs.ifEmpty { "No logs yet." },
+              fontFamily = FontFamily.Monospace,
+              style = MaterialTheme.typography.bodySmall
+      )
     }
+  }
 }
