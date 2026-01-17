@@ -18,4 +18,14 @@
   <path
     android:fillColor="#3DDC84"
     android:pathData="M54,34 a20,20 0 1,0 0,40 a20,20 0 1,0 0,-40" />
+
+  <!-- 4. Text "IP" (White) -->
+  <path
+    android:fillColor="#FFFFFF"
+    android:pathData="M42,44 h5 v20 h-5 z M49,44 h5 v20 h-5 z M54,44 h6 a6,6 0 0,1 0,12 h-6 z" />
+
+  <!-- 5. P's Hole (Green) -->
+  <path
+    android:fillColor="#3DDC84"
+    android:pathData="M54,48 h3 a2,2 0 0,1 0,4 h-3 z" />
 </vector>
