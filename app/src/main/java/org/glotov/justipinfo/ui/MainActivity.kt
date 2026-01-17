@@ -8,13 +8,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.glotov.justipinfo.BuildConfig
 import org.glotov.justipinfo.data.AppRepository
 import org.glotov.justipinfo.data.IpService
 import org.glotov.justipinfo.data.Logger
@@ -31,7 +35,9 @@ class MainActivity : ComponentActivity() {
     val viewModelFactory = MainViewModelFactory(repository)
 
     setContent {
-      MaterialTheme(colorScheme = darkColorScheme(background = Color.Black, onBackground = Color.White)) {
+      MaterialTheme(
+              colorScheme = darkColorScheme(background = Color.Black, onBackground = Color.White)
+      ) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
           MainScreen(viewModelFactory)
         }
@@ -46,51 +52,84 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
   val logs by viewModel.logs.collectAsState()
   val isLoading by viewModel.isLoading.collectAsState()
   val scrollState = rememberScrollState()
+  var showDialog by remember { mutableStateOf(false) }
+  val uriHandler = LocalUriHandler.current
 
   // Scroll to bottom when logs change
   LaunchedEffect(logs) { scrollState.animateScrollTo(scrollState.maxValue) }
 
+  if (showDialog) {
+    AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Just IP Info") },
+            text = {
+              Column {
+                Text("Version: ${BuildConfig.VERSION_NAME}")
+                Spacer(modifier = Modifier.height(8.dp))
+                TextButton(
+                        onClick = {
+                          uriHandler.openUri("https://github.com/denisglotov/just-ipinfo-app")
+                        },
+                        contentPadding = PaddingValues(0.dp)
+                ) { Text("Source Code") }
+              }
+            },
+            confirmButton = { TextButton(onClick = { showDialog = false }) { Text("Close") } }
+    )
+  }
+
   Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp)) {
     // Buttons Row
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-        Button(onClick = { viewModel.onRequestClicked() }, enabled = !isLoading) {
-          if (isLoading) {
-            CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    strokeWidth = 2.dp,
-                    color = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-          }
-          Text("Request")
+    Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+    ) {
+      Button(onClick = { viewModel.onRequestClicked() }, enabled = !isLoading) {
+        if (isLoading) {
+          CircularProgressIndicator(
+                  modifier = Modifier.size(16.dp),
+                  strokeWidth = 2.dp,
+                  color = MaterialTheme.colorScheme.onPrimary
+          )
+          Spacer(modifier = Modifier.width(8.dp))
         }
-
-        Button(
-                onClick = { viewModel.onClearClicked() },
-                enabled = !isLoading,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-        ) { Text("Clear") }
+        Text("Request")
       }
 
-      Spacer(modifier = Modifier.height(16.dp))
+      Button(
+              onClick = { viewModel.onClearClicked() },
+              enabled = !isLoading,
+              colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+      ) { Text("Clear") }
 
-      Text(text = "Logs:", style = MaterialTheme.typography.titleMedium)
-
-      Spacer(modifier = Modifier.height(8.dp))
-
-      // Log Display Area
-      Box(
-              modifier =
-                      Modifier.fillMaxSize()
-                              .background(Color.LightGray.copy(alpha = 0.2f))
-                              .padding(8.dp)
-                              .verticalScroll(scrollState)
-      ) {
-        Text(
-                text = logs.ifEmpty { "No logs yet." },
-                fontFamily = FontFamily.Monospace,
-                style = MaterialTheme.typography.bodySmall
+      IconButton(onClick = { showDialog = true }) {
+        Icon(
+                imageVector = Icons.Default.Settings,
+                contentDescription = "Settings",
+                tint = Color.White
         )
       }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+    Text(text = "Logs:", style = MaterialTheme.typography.titleMedium)
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    // Log Display Area
+    Box(
+            modifier =
+                    Modifier.fillMaxSize()
+                            .background(Color.LightGray.copy(alpha = 0.2f))
+                            .padding(8.dp)
+                            .verticalScroll(scrollState)
+    ) {
+      Text(
+              text = logs.ifEmpty { "No logs yet." },
+              fontFamily = FontFamily.Monospace,
+              style = MaterialTheme.typography.bodySmall
+      )
+    }
   }
 }
