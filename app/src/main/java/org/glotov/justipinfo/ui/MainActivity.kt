@@ -3,6 +3,7 @@ package org.glotov.justipinfo.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +22,7 @@ import org.glotov.justipinfo.data.Logger
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
 
     // Manual Dependency Injection
     val logger = Logger(applicationContext)
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
     val viewModelFactory = MainViewModelFactory(repository)
 
     setContent {
-      MaterialTheme {
+      MaterialTheme(colorScheme = darkColorScheme(background = Color.Black, onBackground = Color.White)) {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
           MainScreen(viewModelFactory)
         }
@@ -51,44 +53,44 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
   Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp)) {
     // Buttons Row
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-      Button(onClick = { viewModel.onRequestClicked() }, enabled = !isLoading) {
-        if (isLoading) {
-          CircularProgressIndicator(
-                  modifier = Modifier.size(16.dp),
-                  strokeWidth = 2.dp,
-                  color = MaterialTheme.colorScheme.onPrimary
-          )
-          Spacer(modifier = Modifier.width(8.dp))
+        Button(onClick = { viewModel.onRequestClicked() }, enabled = !isLoading) {
+          if (isLoading) {
+            CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+          }
+          Text("Request")
         }
-        Text("Request")
+
+        Button(
+                onClick = { viewModel.onClearClicked() },
+                enabled = !isLoading,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+        ) { Text("Clear") }
       }
 
-      Button(
-              onClick = { viewModel.onClearClicked() },
-              enabled = !isLoading,
-              colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-      ) { Text("Clear") }
-    }
+      Spacer(modifier = Modifier.height(16.dp))
 
-    Spacer(modifier = Modifier.height(16.dp))
+      Text(text = "Logs:", style = MaterialTheme.typography.titleMedium)
 
-    Text(text = "Logs:", style = MaterialTheme.typography.titleMedium)
+      Spacer(modifier = Modifier.height(8.dp))
 
-    Spacer(modifier = Modifier.height(8.dp))
-
-    // Log Display Area
-    Box(
-            modifier =
-                    Modifier.fillMaxSize()
-                            .background(Color.LightGray.copy(alpha = 0.2f))
-                            .padding(8.dp)
-                            .verticalScroll(scrollState)
-    ) {
-      Text(
-              text = logs.ifEmpty { "No logs yet." },
-              fontFamily = FontFamily.Monospace,
-              style = MaterialTheme.typography.bodySmall
-      )
-    }
+      // Log Display Area
+      Box(
+              modifier =
+                      Modifier.fillMaxSize()
+                              .background(Color.LightGray.copy(alpha = 0.2f))
+                              .padding(8.dp)
+                              .verticalScroll(scrollState)
+      ) {
+        Text(
+                text = logs.ifEmpty { "No logs yet." },
+                fontFamily = FontFamily.Monospace,
+                style = MaterialTheme.typography.bodySmall
+        )
+      }
   }
 }
