@@ -65,7 +65,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme(
                 colorScheme =
-                    darkColorScheme(background = Color.Black, onBackground = Color.White),
+                    darkColorScheme(
+                        background = Color.Black,
+                        onBackground = Color.White,
+                    ),
             ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -106,18 +109,25 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
                     ) { Text("Source Code") }
                 }
             },
-            confirmButton = { TextButton(onClick = { showDialog = false }) { Text("Close") } },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) { Text("Close") }
+            },
         )
     }
 
-    Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp)) {
+    Column(
+        modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp),
+    ) {
         // Buttons Row
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
         ) {
-            Button(onClick = { viewModel.onRequestClicked() }, enabled = !isLoading) {
+            Button(
+                onClick = { viewModel.onRequestClicked() },
+                enabled = !isLoading,
+            ) {
                 if (isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(16.dp),
@@ -155,7 +165,8 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
         // Log Display Area
         Box(
             modifier =
-                Modifier.fillMaxSize()
+                Modifier
+                    .fillMaxSize()
                     .background(Color.LightGray.copy(alpha = 0.2f))
                     .padding(8.dp)
                     .verticalScroll(scrollState),

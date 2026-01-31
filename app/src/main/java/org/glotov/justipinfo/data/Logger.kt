@@ -6,15 +6,18 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class Logger(private val context: Context) {
+class Logger(
+    private val context: Context,
+) {
     private val logFileName = "app_requests.log"
 
-    private fun getFile(): File {
-        return File(context.filesDir, logFileName)
-    }
+    private fun getFile(): File = File(context.filesDir, logFileName)
 
     fun appendLog(message: String) {
-        val timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        val timestamp =
+            LocalDateTime.now().format(
+                DateTimeFormatter.ISO_LOCAL_DATE_TIME,
+            )
         val entry = "[$timestamp] $message\n-------------------\n"
         try {
             getFile().appendText(entry)

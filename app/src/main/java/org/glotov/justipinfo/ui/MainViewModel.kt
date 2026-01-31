@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.glotov.justipinfo.data.AppRepository
 
-class MainViewModel(private val repository: AppRepository) : ViewModel() {
+class MainViewModel(
+    private val repository: AppRepository,
+) : ViewModel() {
     private val _logs = MutableStateFlow("")
     val logs: StateFlow<String> = _logs.asStateFlow()
 
@@ -37,7 +39,9 @@ class MainViewModel(private val repository: AppRepository) : ViewModel() {
     }
 }
 
-class MainViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {
+class MainViewModelFactory(
+    private val repository: AppRepository,
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
