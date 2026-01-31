@@ -64,11 +64,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme(
-                colorScheme = darkColorScheme(background = Color.Black, onBackground = Color.White),
+                colorScheme =
+                    darkColorScheme(background = Color.Black, onBackground = Color.White),
             ) {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    MainScreen(viewModelFactory)
-                }
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background,
+                ) { MainScreen(viewModelFactory) }
             }
         }
     }
@@ -96,7 +98,9 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
                     Spacer(modifier = Modifier.height(8.dp))
                     TextButton(
                         onClick = {
-                            uriHandler.openUri("https://github.com/denisglotov/just-ipinfo-app")
+                            uriHandler.openUri(
+                                "https://github.com/denisglotov/just-ipinfo-app",
+                            )
                         },
                         contentPadding = PaddingValues(0.dp),
                     ) { Text("Source Code") }
@@ -128,7 +132,10 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
             Button(
                 onClick = { viewModel.onClearClicked() },
                 enabled = !isLoading,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                    ),
             ) { Text("Clear") }
 
             IconButton(onClick = { showDialog = true }) {
