@@ -9,40 +9,44 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.glotov.justipinfo.data.AppRepository
 
-class MainViewModel(private val repository: AppRepository) : ViewModel() {
+class MainViewModel(
+    private val repository: AppRepository,
+) : ViewModel() {
+    private val _logs = MutableStateFlow("")
+    val logs: StateFlow<String> = _logs.asStateFlow()
 
-  private val _logs = MutableStateFlow("")
-  val logs: StateFlow<String> = _logs.asStateFlow()
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-  private val _isLoading = MutableStateFlow(false)
-  val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-  init {
-    loadLogs()
-  }
-
-  private fun loadLogs() {
-    viewModelScope.launch { _logs.value = repository.getLogs() }
-  }
-
-  fun onRequestClicked() {
-    viewModelScope.launch {
-      _isLoading.value = true
-      _logs.value = repository.getAndLogIpInfo()
-      _isLoading.value = false
+    init {
+        loadLogs()
     }
-  }
 
-  fun onClearClicked() {
-    viewModelScope.launch { _logs.value = repository.clearLogs() }
-  }
+    private fun loadLogs() {
+        viewModelScope.launch { _logs.value = repository.getLogs() }
+    }
+
+    fun onRequestClicked() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _logs.value = repository.getAndLogIpInfo()
+            _isLoading.value = false
+        }
+    }
+
+    fun onClearClicked() {
+        viewModelScope.launch { _logs.value = repository.clearLogs() }
+    }
 }
 
-class MainViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {
-  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-      @Suppress("UNCHECKED_CAST") return MainViewModel(repository) as T
+class MainViewModelFactory(
+    private val repository: AppRepository,
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return MainViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
-    throw IllegalArgumentException("Unknown ViewModel class")
-  }
 }
