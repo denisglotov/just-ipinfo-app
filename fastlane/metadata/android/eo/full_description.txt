@@ -1,0 +1,6 @@
+Nur IP-Informoj estas minimumisma Android-aplikaĵo kiu elŝutas IP-informojn.
+
+Trajtoj:
+- Peti IP-informojn: Elŝutas JSON-datumojn de ipinfo.io per GET-peto.
+- Daŭra protokolado: Konservas ĉiun petrezulton (aŭ eraron) kun tempomarko en interna protokoldosiero.
+- Protokolmastrumado: Tuja videbleco de protokoloj en la fasado kun "Viŝi" funkcio.
