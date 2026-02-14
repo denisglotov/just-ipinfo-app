@@ -2,6 +2,7 @@ package org.glotov.justipinfo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -82,6 +83,22 @@ class MainActivity : ComponentActivity() {
             val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
             val isDarkTheme by viewModel.isDarkTheme.collectAsState()
             val baseUrl by viewModel.baseUrl.collectAsState()
+
+            LaunchedEffect(isDarkTheme) {
+                val barStyle =
+                    if (isDarkTheme) {
+                        SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                    } else {
+                        SystemBarStyle.light(
+                            android.graphics.Color.TRANSPARENT,
+                            android.graphics.Color.TRANSPARENT,
+                        )
+                    }
+                enableEdgeToEdge(
+                    statusBarStyle = barStyle,
+                    navigationBarStyle = barStyle,
+                )
+            }
 
             JustIpInfoTheme(darkTheme = isDarkTheme) {
                 Surface(
