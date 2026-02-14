@@ -50,7 +50,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.glotov.justipinfo.BuildConfig
 import org.glotov.justipinfo.data.AppRepository
@@ -72,21 +71,22 @@ class MainActivity : ComponentActivity() {
             val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
             val isDarkTheme by viewModel.isDarkTheme.collectAsState()
 
-            val colorScheme = if (isDarkTheme) {
-                darkColorScheme(
-                    background = Color.Black,
-                    onBackground = Color.White,
-                    surface = Color.Black,
-                    onSurface = Color.White,
-                )
-            } else {
-                lightColorScheme(
-                    background = Color.White,
-                    onBackground = Color.Black,
-                    surface = Color.White,
-                    onSurface = Color.Black,
-                )
-            }
+            val colorScheme =
+                if (isDarkTheme) {
+                    darkColorScheme(
+                        background = Color.Black,
+                        onBackground = Color.White,
+                        surface = Color.Black,
+                        onSurface = Color.White,
+                    )
+                } else {
+                    lightColorScheme(
+                        background = Color.White,
+                        onBackground = Color.Black,
+                        surface = Color.White,
+                        onSurface = Color.Black,
+                    )
+                }
 
             MaterialTheme(colorScheme = colorScheme) {
                 Surface(
@@ -137,10 +137,11 @@ fun MainScreen(viewModel: MainViewModel) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .safeDrawingPadding()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(16.dp),
     ) {
         // Top Row
         Row(
@@ -169,9 +170,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 Button(
                     onClick = { viewModel.onClearClicked() },
                     enabled = !isLoading,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                    ),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                        ),
                 ) { Text("Clear") }
             }
 
@@ -180,12 +182,13 @@ fun MainScreen(viewModel: MainViewModel) {
                     checked = isDarkTheme,
                     onCheckedChange = { viewModel.toggleDarkTheme(it) },
                     modifier = Modifier.scale(0.8f),
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.primary,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
-                        uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
-                        uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
-                    )
+                    colors =
+                        SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.primary,
+                            checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                        ),
                 )
 
                 IconButton(onClick = { showDialog = true }) {
@@ -202,27 +205,31 @@ fun MainScreen(viewModel: MainViewModel) {
         Text(
             text = "Logs:",
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Log Display Area
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    if (isDarkTheme) Color.LightGray.copy(alpha = 0.2f)
-                    else Color.DarkGray.copy(alpha = 0.1f)
-                )
-                .padding(8.dp)
-                .verticalScroll(scrollState),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        if (isDarkTheme) {
+                            Color.LightGray.copy(alpha = 0.2f)
+                        } else {
+                            Color.DarkGray.copy(alpha = 0.1f)
+                        },
+                    )
+                    .padding(8.dp)
+                    .verticalScroll(scrollState),
         ) {
             Text(
                 text = logs.ifEmpty { "No logs yet." },
                 fontFamily = FontFamily.Monospace,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
         }
     }
