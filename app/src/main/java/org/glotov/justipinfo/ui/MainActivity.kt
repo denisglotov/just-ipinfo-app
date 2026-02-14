@@ -74,7 +74,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    MainScreen(viewModel)
+                    MainScreen(
+                        viewModel = viewModel,
+                        isDarkTheme = isDarkTheme,
+                        onThemeToggle = { viewModel.toggleDarkTheme(it) },
+                    )
                 }
             }
         }
@@ -82,10 +86,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(
+    viewModel: MainViewModel,
+    isDarkTheme: Boolean,
+    onThemeToggle: (Boolean) -> Unit,
+) {
     val logs by viewModel.logs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
     val scrollState = rememberScrollState()
     var showDialog by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
@@ -161,7 +168,7 @@ fun MainScreen(viewModel: MainViewModel) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Switch(
                     checked = isDarkTheme,
-                    onCheckedChange = { viewModel.toggleDarkTheme(it) },
+                    onCheckedChange = { onThemeToggle(it) },
                     modifier = Modifier.scale(0.8f),
                     colors =
                         SwitchDefaults.colors(
