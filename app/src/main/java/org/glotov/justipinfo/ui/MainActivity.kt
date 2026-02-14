@@ -85,25 +85,18 @@ class MainActivity : ComponentActivity() {
             val baseUrl by viewModel.baseUrl.collectAsState()
 
             LaunchedEffect(isDarkTheme) {
+                val barStyle =
+                    if (isDarkTheme) {
+                        SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+                    } else {
+                        SystemBarStyle.light(
+                            android.graphics.Color.TRANSPARENT,
+                            android.graphics.Color.TRANSPARENT,
+                        )
+                    }
                 enableEdgeToEdge(
-                    statusBarStyle =
-                        if (isDarkTheme) {
-                            SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
-                        } else {
-                            SystemBarStyle.light(
-                                android.graphics.Color.TRANSPARENT,
-                                android.graphics.Color.TRANSPARENT,
-                            )
-                        },
-                    navigationBarStyle =
-                        if (isDarkTheme) {
-                            SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
-                        } else {
-                            SystemBarStyle.light(
-                                android.graphics.Color.TRANSPARENT,
-                                android.graphics.Color.TRANSPARENT,
-                            )
-                        },
+                    statusBarStyle = barStyle,
+                    navigationBarStyle = barStyle,
                 )
             }
 
