@@ -34,8 +34,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,7 +44,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -55,6 +52,7 @@ import org.glotov.justipinfo.BuildConfig
 import org.glotov.justipinfo.data.AppRepository
 import org.glotov.justipinfo.data.IpService
 import org.glotov.justipinfo.data.Logger
+import org.glotov.justipinfo.ui.theme.JustIpInfoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,24 +69,7 @@ class MainActivity : ComponentActivity() {
             val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
             val isDarkTheme by viewModel.isDarkTheme.collectAsState()
 
-            val colorScheme =
-                if (isDarkTheme) {
-                    darkColorScheme(
-                        background = Color.Black,
-                        onBackground = Color.White,
-                        surface = Color.Black,
-                        onSurface = Color.White,
-                    )
-                } else {
-                    lightColorScheme(
-                        background = Color.White,
-                        onBackground = Color.Black,
-                        surface = Color.White,
-                        onSurface = Color.Black,
-                    )
-                }
-
-            MaterialTheme(colorScheme = colorScheme) {
+            JustIpInfoTheme(darkTheme = isDarkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
@@ -215,13 +196,7 @@ fun MainScreen(viewModel: MainViewModel) {
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(
-                        if (isDarkTheme) {
-                            Color.LightGray.copy(alpha = 0.2f)
-                        } else {
-                            Color.DarkGray.copy(alpha = 0.1f)
-                        },
-                    )
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                     .padding(8.dp)
                     .verticalScroll(scrollState),
         ) {

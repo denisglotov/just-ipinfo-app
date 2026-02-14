@@ -10,7 +10,7 @@ class AppRepository(
     private val logger: Logger,
     private val context: Context,
 ) {
-    private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     suspend fun getAndLogIpInfo(): String =
         withContext(Dispatchers.IO) {
@@ -31,10 +31,15 @@ class AppRepository(
         }
 
     fun isDarkTheme(): Boolean {
-        return prefs.getBoolean("dark_theme", true)
+        return prefs.getBoolean(KEY_DARK_THEME, true)
     }
 
     fun setDarkTheme(isDark: Boolean) {
-        prefs.edit { putBoolean("dark_theme", isDark) }
+        prefs.edit { putBoolean(KEY_DARK_THEME, isDark) }
+    }
+
+    companion object {
+        private const val PREFS_NAME = "settings"
+        private const val KEY_DARK_THEME = "dark_theme"
     }
 }
