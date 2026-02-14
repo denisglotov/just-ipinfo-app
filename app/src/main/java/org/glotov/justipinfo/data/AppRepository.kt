@@ -39,7 +39,7 @@ class AppRepository(
     }
 
     fun getBaseUrl(): String {
-        return prefs.getString(KEY_BASE_URL, DEFAULT_URL) ?: DEFAULT_URL
+        return prefs.getString(KEY_BASE_URL, DEFAULT_URL)!!
     }
 
     fun setBaseUrl(url: String) {
