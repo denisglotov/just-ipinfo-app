@@ -18,6 +18,9 @@ class MainViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    private val _isDarkTheme = MutableStateFlow(repository.isDarkTheme())
+    val isDarkTheme: StateFlow<Boolean> = _isDarkTheme.asStateFlow()
+
     init {
         loadLogs()
     }
@@ -36,6 +39,11 @@ class MainViewModel(
 
     fun onClearClicked() {
         viewModelScope.launch { _logs.value = repository.clearLogs() }
+    }
+
+    fun toggleDarkTheme(isDark: Boolean) {
+        _isDarkTheme.value = isDark
+        repository.setDarkTheme(isDark)
     }
 }
 
