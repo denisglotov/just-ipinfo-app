@@ -1,15 +1,15 @@
-# JustIpInfo
+# Just IP Info
 
-A minimalistic, Clean Code Android application that fetches IP information from `ipinfo.io` and
-maintains a timestamped log file.
+A minimalistic, Clean Code Android application that fetches IP information from various providers
+and maintains a timestamped log file.
 
 ## Features
-- **Request IP Info**: Fetches JSON data from `ipinfo.io` via GET request.
-- **Persistent Logging**: Saves every request result (or error) with a
-  timestamp to an internal log file.
+- **Configurable IP Info Source**: Fetches data from `ipinfo.io` (default) or any user-defined URL.
+- **Service Presets**: Quickly switch between popular IP services like `ifconfig.co`, `ipify.org`, and `icanhazip.com`.
+- **Light & Dark Themes**: Full support for both themes with a persistent toggle.
+- **Persistent Logging**: Saves every request result (or error) with a timestamp to an internal log file.
 - **Log Management**: Immediate visibility of logs in the UI with a "Clear" function.
-- **Clean Architecture**: Follows MVVM principles with manual dependency injection for minimal
-  boilerplate.
+- **Clean Architecture**: Follows MVVM principles with manual dependency injection for minimal boilerplate and state hoisting for predictable UI behavior.
 
 ## Tech Stack
 - **Language**: Kotlin
