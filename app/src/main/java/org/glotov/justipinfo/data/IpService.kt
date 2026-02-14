@@ -2,6 +2,7 @@ package org.glotov.justipinfo.data
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.IOException
 
 class IpService {
     private val client = OkHttpClient()
@@ -18,8 +19,8 @@ class IpService {
             }
         } catch (e: IllegalArgumentException) {
             "Error: Invalid URL - ${e.message}"
-        } catch (e: Exception) {
-            "Error: ${e.message}"
+        } catch (e: IOException) {
+            "Error: Network request failed - ${e.message}"
         }
     }
 }

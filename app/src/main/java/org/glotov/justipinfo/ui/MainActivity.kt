@@ -56,6 +56,17 @@ import org.glotov.justipinfo.data.IpService
 import org.glotov.justipinfo.data.Logger
 import org.glotov.justipinfo.ui.theme.JustIpInfoTheme
 
+private val PRESET_URLS =
+    listOf(
+        "https://api.ipify.org",
+        "https://checkip.amazonaws.com",
+        "https://icanhazip.com",
+        "https://ident.me",
+        "https://ifconfig.co/json",
+        "https://ifconfig.me",
+        "https://ipinfo.io/json",
+    )
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,16 +119,6 @@ fun MainScreen(
     LaunchedEffect(logs) { scrollState.animateScrollTo(scrollState.maxValue) }
 
     if (showDialog) {
-        val presets =
-            listOf(
-                "https://api.ipify.org",
-                "https://checkip.amazonaws.com",
-                "https://icanhazip.com",
-                "https://ident.me",
-                "https://ifconfig.co/json",
-                "https://ifconfig.me",
-                "https://ipinfo.io/json",
-            )
         AlertDialog(
             onDismissRequest = { showDialog = false },
             title = { Text("Settings") },
@@ -135,17 +136,19 @@ fun MainScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Column {
-                        presets.forEach { url ->
-                            TextButton(
-                                onClick = { onBaseUrlChange(url) },
-                                contentPadding = PaddingValues(0.dp),
-                                modifier = Modifier.height(32.dp),
-                            ) {
-                                Text(
-                                    text = url,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
+                        PRESET_URLS.forEach { url ->
+                            androidx.compose.runtime.key(url) {
+                                TextButton(
+                                    onClick = { onBaseUrlChange(url) },
+                                    contentPadding = PaddingValues(0.dp),
+                                    modifier = Modifier.height(32.dp),
+                                ) {
+                                    Text(
+                                        text = url,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
                             }
                         }
                     }
