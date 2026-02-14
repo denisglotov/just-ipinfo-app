@@ -21,6 +21,9 @@ class MainViewModel(
     private val _isDarkTheme = MutableStateFlow(repository.isDarkTheme())
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme.asStateFlow()
 
+    private val _baseUrl = MutableStateFlow(repository.getBaseUrl())
+    val baseUrl: StateFlow<String> = _baseUrl.asStateFlow()
+
     init {
         loadLogs()
     }
@@ -44,6 +47,11 @@ class MainViewModel(
     fun toggleDarkTheme(isDark: Boolean) {
         _isDarkTheme.value = isDark
         repository.setDarkTheme(isDark)
+    }
+
+    fun updateBaseUrl(url: String) {
+        _baseUrl.value = url
+        repository.setBaseUrl(url)
     }
 }
 

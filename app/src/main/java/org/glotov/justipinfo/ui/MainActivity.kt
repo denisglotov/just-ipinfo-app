@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -29,6 +30,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -54,6 +56,17 @@ import org.glotov.justipinfo.data.IpService
 import org.glotov.justipinfo.data.Logger
 import org.glotov.justipinfo.ui.theme.JustIpInfoTheme
 
+private val PRESET_URLS =
+    listOf(
+        "https://api.ipify.org",
+        "https://checkip.amazonaws.com",
+        "https://icanhazip.com",
+        "https://ident.me",
+        "https://ifconfig.co/json",
+        "https://ifconfig.me",
+        "https://ipinfo.io/json",
+    )
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +81,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
             val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+            val baseUrl by viewModel.baseUrl.collectAsState()
 
             JustIpInfoTheme(darkTheme = isDarkTheme) {
                 Surface(
@@ -78,6 +92,8 @@ class MainActivity : ComponentActivity() {
                         viewModel = viewModel,
                         isDarkTheme = isDarkTheme,
                         onThemeToggle = { viewModel.toggleDarkTheme(it) },
+                        baseUrl = baseUrl,
+                        onBaseUrlChange = { viewModel.updateBaseUrl(it) },
                     )
                 }
             }
@@ -90,6 +106,8 @@ fun MainScreen(
     viewModel: MainViewModel,
     isDarkTheme: Boolean,
     onThemeToggle: (Boolean) -> Unit,
+    baseUrl: String,
+    onBaseUrlChange: (String) -> Unit,
 ) {
     val logs by viewModel.logs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -103,11 +121,38 @@ fun MainScreen(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text("Just IP Info") },
+            title = { Text("Settings") },
             text = {
                 Column {
-                    Text("Version: ${BuildConfig.VERSION_NAME}")
+                    Text("Version: ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Service URL:", style = MaterialTheme.typography.labelLarge)
+                    OutlinedTextField(
+                        value = baseUrl,
+                        onValueChange = onBaseUrlChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
+                    Column {
+                        PRESET_URLS.forEach { url ->
+                            androidx.compose.runtime.key(url) {
+                                TextButton(
+                                    onClick = { onBaseUrlChange(url) },
+                                    contentPadding = PaddingValues(0.dp),
+                                    modifier = Modifier.height(32.dp),
+                                ) {
+                                    Text(
+                                        text = url,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                     TextButton(
                         onClick = {
                             uriHandler.openUri(
@@ -119,7 +164,13 @@ fun MainScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showDialog = false }) { Text("Close") }
+                IconButton(onClick = { showDialog = false }) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Confirm",
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
             },
         )
     }

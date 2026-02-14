@@ -1,6 +1,7 @@
-Just IP Info is a minimalistic, Android application that fetches IP information.
+Just IP Info is a minimalistic Android application that fetches IP information from various providers.
 
 Features:
-- Request IP Info: Fetches JSON data from ipinfo.io via GET request.
+- Configurable Sources: Fetch data from ipinfo.io or any user-defined URL with quick presets.
+- Light & Dark Themes: Full support for both themes with a persistent toggle.
 - Persistent Logging: Saves every request result (or error) with a timestamp to an internal log file.
 - Log Management: Immediate visibility of logs in the UI with a "Clear" function.

@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Theming:** Added support for Light and Dark themes with a persistent toggle switch.
-- **UI:** Improved layout to prevent overlap with the system status bar.
+- **IP Sources:** Added ability to configure a custom service URL with several popular presets.
+- **UI:** Improved layout to prevent overlap with the system status bar and modernized the Settings dialog.
+- **Reliability:** Added error handling for invalid URLs to prevent crashes.
 
 ## [1.0.0] - 2026-01-31
 
