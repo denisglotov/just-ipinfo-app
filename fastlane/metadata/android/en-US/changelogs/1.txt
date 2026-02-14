@@ -1,0 +1,4 @@
+- Retrieve IP details from ipinfo.io.
+- Automatically log requests with timestamps.
+- View and clear logs in the app.
+- Clean Material Design 3 interface.

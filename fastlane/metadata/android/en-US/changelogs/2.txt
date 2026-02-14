@@ -1,0 +1,3 @@
+- Added Light and Dark theme support.
+- Added configurable IP service URLs with presets.
+- Improved UI layout and error handling.
