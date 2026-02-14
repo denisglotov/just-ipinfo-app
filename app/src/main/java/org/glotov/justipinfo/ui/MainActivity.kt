@@ -30,9 +30,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,11 +43,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.glotov.justipinfo.BuildConfig
 import org.glotov.justipinfo.data.AppRepository
@@ -59,31 +65,46 @@ class MainActivity : ComponentActivity() {
         // Manual Dependency Injection
         val logger = Logger(applicationContext)
         val ipService = IpService()
-        val repository = AppRepository(ipService, logger)
+        val repository = AppRepository(ipService, logger, applicationContext)
         val viewModelFactory = MainViewModelFactory(repository)
 
         setContent {
-            MaterialTheme(
-                colorScheme =
-                    darkColorScheme(
-                        background = Color.Black,
-                        onBackground = Color.White,
-                    ),
-            ) {
+            val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
+            val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+
+            val colorScheme = if (isDarkTheme) {
+                darkColorScheme(
+                    background = Color.Black,
+                    onBackground = Color.White,
+                    surface = Color.Black,
+                    onSurface = Color.White,
+                )
+            } else {
+                lightColorScheme(
+                    background = Color.White,
+                    onBackground = Color.Black,
+                    surface = Color.White,
+                    onSurface = Color.Black,
+                )
+            }
+
+            MaterialTheme(colorScheme = colorScheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
-                ) { MainScreen(viewModelFactory) }
+                ) {
+                    MainScreen(viewModel)
+                }
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(viewModelFactory: MainViewModelFactory) {
-    val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
+fun MainScreen(viewModel: MainViewModel) {
     val logs by viewModel.logs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
     val scrollState = rememberScrollState()
     var showDialog by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
@@ -116,65 +137,92 @@ fun MainScreen(viewModelFactory: MainViewModelFactory) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+            .padding(16.dp),
     ) {
-        // Buttons Row
+        // Top Row
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Button(
-                onClick = { viewModel.onRequestClicked() },
-                enabled = !isLoading,
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(16.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(
+                    onClick = { viewModel.onRequestClicked() },
+                    enabled = !isLoading,
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    Text("Request")
                 }
-                Text("Request")
-            }
 
-            Button(
-                onClick = { viewModel.onClearClicked() },
-                enabled = !isLoading,
-                colors =
-                    ButtonDefaults.buttonColors(
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Button(
+                    onClick = { viewModel.onClearClicked() },
+                    enabled = !isLoading,
+                    colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
                     ),
-            ) { Text("Clear") }
+                ) { Text("Clear") }
+            }
 
-            IconButton(onClick = { showDialog = true }) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Settings",
-                    tint = Color.White,
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Switch(
+                    checked = isDarkTheme,
+                    onCheckedChange = { viewModel.toggleDarkTheme(it) },
+                    modifier = Modifier.scale(0.8f),
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                        uncheckedThumbColor = MaterialTheme.colorScheme.secondary,
+                        uncheckedTrackColor = MaterialTheme.colorScheme.secondaryContainer,
+                    )
                 )
+
+                IconButton(onClick = { showDialog = true }) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Logs:", style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = "Logs:",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         // Log Display Area
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(Color.LightGray.copy(alpha = 0.2f))
-                    .padding(8.dp)
-                    .verticalScroll(scrollState),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    if (isDarkTheme) Color.LightGray.copy(alpha = 0.2f)
+                    else Color.DarkGray.copy(alpha = 0.1f)
+                )
+                .padding(8.dp)
+                .verticalScroll(scrollState),
         ) {
             Text(
                 text = logs.ifEmpty { "No logs yet." },
                 fontFamily = FontFamily.Monospace,
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }
