@@ -2,65 +2,47 @@ package org.glotov.justipinfo.data
 
 import android.content.Context
 import androidx.core.content.edit
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface AppRepository {
-    suspend fun getAndLogIpInfo(): String
-
-    suspend fun getLogs(): String
-
-    suspend fun clearLogs(): String
-
-    fun isDarkTheme(): Boolean
-
-    fun setDarkTheme(isDark: Boolean)
-
-    fun getBaseUrl(): String
-
-    fun setBaseUrl(url: String)
-}
-
-class DefaultAppRepository(
+class AppRepository(
     private val ipService: IpService,
     private val logger: Logger,
     private val context: Context,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-) : AppRepository {
+) {
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    override suspend fun getAndLogIpInfo(): String =
-        withContext(ioDispatcher) {
+    suspend fun getAndLogIpInfo(): String =
+        withContext(Dispatchers.IO) {
             val result = ipService.fetchIpInfo(getBaseUrl())
             logger.appendLog(result)
             logger.readLogs() // Return updated logs
         }
 
-    override suspend fun getLogs(): String =
-        withContext(ioDispatcher) {
+    suspend fun getLogs(): String =
+        withContext(Dispatchers.IO) {
             logger.readLogs()
         }
 
-    override suspend fun clearLogs(): String =
-        withContext(ioDispatcher) {
+    suspend fun clearLogs(): String =
+        withContext(Dispatchers.IO) {
             logger.clearLogs()
             ""
         }
 
-    override fun isDarkTheme(): Boolean {
+    fun isDarkTheme(): Boolean {
         return prefs.getBoolean(KEY_DARK_THEME, true)
     }
 
-    override fun setDarkTheme(isDark: Boolean) {
+    fun setDarkTheme(isDark: Boolean) {
         prefs.edit { putBoolean(KEY_DARK_THEME, isDark) }
     }
 
-    override fun getBaseUrl(): String {
+    fun getBaseUrl(): String {
         return prefs.getString(KEY_BASE_URL, DEFAULT_URL)!!
     }
 
-    override fun setBaseUrl(url: String) {
+    fun setBaseUrl(url: String) {
         prefs.edit { putString(KEY_BASE_URL, url) }
     }
 
