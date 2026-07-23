@@ -4,10 +4,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 
-class IpService {
-    private val client = OkHttpClient()
-
-    fun fetchIpInfo(url: String): String {
+open class IpService(
+    private val client: OkHttpClient = OkHttpClient(),
+) {
+    open fun fetchIpInfo(url: String): String {
         return try {
             val request = Request.Builder().url(url).build()
             client.newCall(request).execute().use { response ->

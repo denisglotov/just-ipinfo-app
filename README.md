@@ -13,9 +13,10 @@ and maintains a timestamped log file.
 
 ## Tech Stack
 - **Language**: Kotlin
-- **UI Framework**: Jetpack Compose
+- **UI Framework**: Jetpack Compose (Material 3, Edge-to-Edge)
 - **Networking**: OkHttp
-- **Build System**: Gradle (Kotlin DSL)
+- **Build System**: Gradle (Kotlin DSL, Version Catalog `libs.versions.toml`)
+- **Testing**: JUnit 4, Kotlinx Coroutines Test
 
 ## Prerequisites
 - **JDK 17** or higher.

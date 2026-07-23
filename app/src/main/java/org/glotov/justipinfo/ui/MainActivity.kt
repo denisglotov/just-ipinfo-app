@@ -49,10 +49,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.glotov.justipinfo.BuildConfig
-import org.glotov.justipinfo.data.AppRepository
+import org.glotov.justipinfo.data.DefaultAppRepository
 import org.glotov.justipinfo.data.IpService
 import org.glotov.justipinfo.data.Logger
 import org.glotov.justipinfo.ui.theme.JustIpInfoTheme
@@ -76,7 +77,7 @@ class MainActivity : ComponentActivity() {
         // Manual Dependency Injection
         val logger = Logger(applicationContext)
         val ipService = IpService()
-        val repository = AppRepository(ipService, logger, applicationContext)
+        val repository = DefaultAppRepository(ipService, logger, applicationContext)
         val viewModelFactory = MainViewModelFactory(repository)
 
         setContent {
@@ -125,9 +126,36 @@ fun MainScreen(
     onThemeToggle: (Boolean) -> Unit,
     baseUrl: String,
     onBaseUrlChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val logs by viewModel.logs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+
+    MainContent(
+        logs = logs,
+        isLoading = isLoading,
+        isDarkTheme = isDarkTheme,
+        baseUrl = baseUrl,
+        onRequestClick = { viewModel.onRequestClicked() },
+        onClearClick = { viewModel.onClearClicked() },
+        onThemeToggle = onThemeToggle,
+        onBaseUrlChange = onBaseUrlChange,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun MainContent(
+    logs: String,
+    isLoading: Boolean,
+    isDarkTheme: Boolean,
+    baseUrl: String,
+    onRequestClick: () -> Unit,
+    onClearClick: () -> Unit,
+    onThemeToggle: (Boolean) -> Unit,
+    onBaseUrlChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val scrollState = rememberScrollState()
     var showDialog by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
@@ -194,7 +222,7 @@ fun MainScreen(
 
     Column(
         modifier =
-            Modifier
+            modifier
                 .fillMaxSize()
                 .safeDrawingPadding()
                 .padding(16.dp),
@@ -207,7 +235,7 @@ fun MainScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
-                    onClick = { viewModel.onRequestClicked() },
+                    onClick = onRequestClick,
                     enabled = !isLoading,
                 ) {
                     if (isLoading) {
@@ -224,7 +252,7 @@ fun MainScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Button(
-                    onClick = { viewModel.onClearClicked() },
+                    onClick = onClearClick,
                     enabled = !isLoading,
                     colors =
                         ButtonDefaults.buttonColors(
@@ -280,6 +308,44 @@ fun MainScreen(
                 fontFamily = FontFamily.Monospace,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MainContentPreviewLight() {
+    JustIpInfoTheme(darkTheme = false) {
+        Surface {
+            MainContent(
+                logs = "[2026-07-23T12:00:00] {\"ip\": \"127.0.0.1\"}",
+                isLoading = false,
+                isDarkTheme = false,
+                baseUrl = "https://ipinfo.io/json",
+                onRequestClick = {},
+                onClearClick = {},
+                onThemeToggle = {},
+                onBaseUrlChange = {},
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun MainContentPreviewDark() {
+    JustIpInfoTheme(darkTheme = true) {
+        Surface {
+            MainContent(
+                logs = "[2026-07-23T12:00:00] {\"ip\": \"127.0.0.1\"}",
+                isLoading = false,
+                isDarkTheme = true,
+                baseUrl = "https://ipinfo.io/json",
+                onRequestClick = {},
+                onClearClick = {},
+                onThemeToggle = {},
+                onBaseUrlChange = {},
             )
         }
     }
