@@ -48,8 +48,9 @@ To install and launch the app on a connected device or running emulator:
 ```
 
 ### 4. Other Useful Commands
+- **Build Android App Bundle (.aab) for Google Play**: `./gradlew bundleRelease` (or `./gradlew bundleDebug`)
+  - Output location: `app/build/outputs/bundle/release/app-release.aab`
 - **Clean the build**: `./gradlew clean`
-- **Run Unit Tests**: `./gradlew test`
 - **Check Linting**: `./gradlew lint`
 
 ## Project Structure

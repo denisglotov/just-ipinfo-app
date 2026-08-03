@@ -7,8 +7,8 @@ import java.io.IOException
 class IpService {
     private val client = OkHttpClient()
 
-    fun fetchIpInfo(url: String): String {
-        return try {
+    fun fetchIpInfo(url: String): String =
+        try {
             val request = Request.Builder().url(url).build()
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
@@ -22,5 +22,4 @@ class IpService {
         } catch (e: IOException) {
             "Error: Network request failed - ${e.message}"
         }
-    }
 }
