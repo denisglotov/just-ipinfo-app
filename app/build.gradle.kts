@@ -26,7 +26,7 @@ plugins {
 }
 
 android {
-    namespace = "org.glotov.justipinfo"
+    namespace = "org.dymka.justipinfo"
     compileSdk = 36
 
     defaultConfig {
@@ -59,7 +59,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
