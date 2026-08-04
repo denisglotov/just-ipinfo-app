@@ -30,7 +30,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "org.glotov.justipinfo"
+        applicationId = "org.dymka.justipinfo"
         minSdk = 26
         targetSdk = 36
         versionCode = 3

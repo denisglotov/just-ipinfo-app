@@ -1,4 +1,4 @@
-package org.glotov.justipinfo.ui
+package org.dymka.justipinfo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -52,10 +52,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.dymka.justipinfo.BuildConfig
-import org.glotov.justipinfo.data.AppRepository
-import org.glotov.justipinfo.data.IpService
-import org.glotov.justipinfo.data.Logger
-import org.glotov.justipinfo.ui.theme.JustIpInfoTheme
+import org.dymka.justipinfo.data.AppRepository
+import org.dymka.justipinfo.data.IpService
+import org.dymka.justipinfo.data.Logger
+import org.dymka.justipinfo.ui.theme.JustIpInfoTheme
 
 private val PRESET_URLS =
     listOf(
