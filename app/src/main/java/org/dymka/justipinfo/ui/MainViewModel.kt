@@ -1,4 +1,4 @@
-package org.glotov.justipinfo.ui
+package org.dymka.justipinfo.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.glotov.justipinfo.data.AppRepository
+import org.dymka.justipinfo.data.AppRepository
 
 class MainViewModel(
     private val repository: AppRepository,

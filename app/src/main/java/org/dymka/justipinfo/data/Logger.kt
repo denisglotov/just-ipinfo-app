@@ -1,4 +1,4 @@
-package org.glotov.justipinfo.data
+package org.dymka.justipinfo.data
 
 import android.content.Context
 import java.io.File

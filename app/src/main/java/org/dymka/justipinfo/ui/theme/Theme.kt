@@ -1,4 +1,4 @@
-package org.glotov.justipinfo.ui.theme
+package org.dymka.justipinfo.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme

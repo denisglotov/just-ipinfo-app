@@ -1,4 +1,4 @@
-package org.glotov.justipinfo.data
+package org.dymka.justipinfo.data
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
