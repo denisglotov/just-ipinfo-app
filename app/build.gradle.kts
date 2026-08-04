@@ -15,7 +15,8 @@ fun getSecret(
         .environmentVariable(envName)
         .orElse(providers.gradleProperty(propName))
         .orNull
-        ?: localProperties.getProperty(propName)
+        ?.ifBlank { null }
+        ?: localProperties.getProperty(propName)?.ifBlank { null }
 
 plugins {
     alias(libs.plugins.android.application)
