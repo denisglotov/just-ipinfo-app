@@ -3,6 +3,16 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-04
+
+### Added
+- **Release Automation:** Support for release keystore signing via Gradle properties/env vars and GitHub Actions workflow to publish signed APK and AAB artifacts.
+- **Build Performance:** Enabled Gradle configuration caching.
+
+### Changed
+- **Dependency Management:** Migrated build dependencies to standard Gradle Version Catalog (`libs.versions.toml`).
+- **Dependencies Updated:** Upgraded Gradle wrapper to 8.13, Kotlin to 2.1.20, Compose BOM to 2026.06.01, and Activity Compose to 1.13.0.
+
 ## [1.1.0] - 2026-02-14
 
 ### Added

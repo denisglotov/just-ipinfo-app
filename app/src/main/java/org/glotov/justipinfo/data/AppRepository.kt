@@ -30,17 +30,13 @@ class AppRepository(
             ""
         }
 
-    fun isDarkTheme(): Boolean {
-        return prefs.getBoolean(KEY_DARK_THEME, true)
-    }
+    fun isDarkTheme(): Boolean = prefs.getBoolean(KEY_DARK_THEME, true)
 
     fun setDarkTheme(isDark: Boolean) {
         prefs.edit { putBoolean(KEY_DARK_THEME, isDark) }
     }
 
-    fun getBaseUrl(): String {
-        return prefs.getString(KEY_BASE_URL, DEFAULT_URL)!!
-    }
+    fun getBaseUrl(): String = prefs.getString(KEY_BASE_URL, DEFAULT_URL)!!
 
     fun setBaseUrl(url: String) {
         prefs.edit { putString(KEY_BASE_URL, url) }
