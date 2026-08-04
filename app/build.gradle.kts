@@ -1,3 +1,22 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+fun getSecret(
+    envName: String,
+    propName: String,
+): String? =
+    providers
+        .environmentVariable(envName)
+        .orElse(providers.gradleProperty(propName))
+        .orNull
+        ?: localProperties.getProperty(propName)
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +39,22 @@ android {
         vectorDrawables { useSupportLibrary = true }
     }
 
+    signingConfigs {
+        create("release") {
+            val storeFilePath = getSecret("KEYSTORE_FILE_PATH", "RELEASE_STORE_FILE")
+            val storePass = getSecret("KEYSTORE_PASSWORD", "RELEASE_STORE_PASSWORD")
+            val alias = getSecret("KEY_ALIAS", "RELEASE_KEY_ALIAS")
+            val keyPass = getSecret("KEY_PASSWORD", "RELEASE_KEY_PASSWORD") ?: storePass
+
+            if (!storeFilePath.isNullOrEmpty()) {
+                storeFile = file(storeFilePath)
+                storePassword = storePass
+                keyAlias = alias
+                keyPassword = keyPass
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -27,6 +62,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            val releaseSigning = signingConfigs.getByName("release")
+            if (releaseSigning.storeFile?.exists() == true) {
+                signingConfig = releaseSigning
+            }
         }
     }
     compileOptions {

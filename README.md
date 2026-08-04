@@ -23,12 +23,11 @@ and maintains a timestamped log file.
 
 ## Build Instructions (Terminal)
 
-### 1. Configure the SDK Path
-Make sure you have Android SDK inatalled and `ANDROID_HOME` exported. 
-Alternatively explicitly specify the path to it. 
+### 1. Configure `local.properties`
+Make sure you have Android SDK installed and `ANDROID_HOME` exported, or specify its path in `local.properties`:
 
-```bash
-echo "sdk.dir=/opt/homebrew/share/android-commandlinetools" > local.properties
+```properties
+sdk.dir=/opt/homebrew/share/android-commandlinetools
 ```
 
 ### 2. Build the Project
@@ -47,9 +46,31 @@ To install and launch the app on a connected device or running emulator:
 ./gradlew installDebug
 ```
 
-### 4. Other Useful Commands
-- **Build Android App Bundle (.aab) for Google Play**: `./gradlew bundleRelease` (or `./gradlew bundleDebug`)
-  - Output location: `app/build/outputs/bundle/release/app-release.aab`
+### 4. Build & Sign Release APK / Bundle
+
+To build a signed release APK or bundle, add your keystore path and key alias to `local.properties`:
+
+```properties
+sdk.dir=/opt/homebrew/share/android-commandlinetools
+RELEASE_STORE_FILE=/path/to/your/release.jks
+RELEASE_KEY_ALIAS=your_key_alias
+```
+
+Then run the build command passing your keystore password via environment variable or `-P` flag:
+
+```bash
+# Build Signed Release APK
+KEYSTORE_PASSWORD="your_keystore_password" ./gradlew assembleRelease
+
+# Build Signed App Bundle (.aab) for Google Play
+KEYSTORE_PASSWORD="your_keystore_password" ./gradlew bundleRelease
+```
+
+**Output locations:**
+- **Signed APK:** `app/build/outputs/apk/release/app-release.apk`
+- **Signed App Bundle:** `app/build/outputs/bundle/release/app-release.aab`
+
+### 5. Other Useful Commands
 - **Clean the build**: `./gradlew clean`
 - **Check Linting**: `./gradlew lint`
 
