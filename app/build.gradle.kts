@@ -26,7 +26,7 @@ plugins {
 }
 
 android {
-    namespace = "org.glotov.justipinfo"
+    namespace = "org.dymka.justipinfo"
     compileSdk = 36
 
     defaultConfig {

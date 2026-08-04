@@ -51,7 +51,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.glotov.justipinfo.BuildConfig
+import org.dymka.justipinfo.BuildConfig
 import org.glotov.justipinfo.data.AppRepository
 import org.glotov.justipinfo.data.IpService
 import org.glotov.justipinfo.data.Logger
