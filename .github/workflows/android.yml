@@ -42,19 +42,19 @@ jobs:
         run: ./gradlew ktlintCheck
 
       - name: Run Lint
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.action != 'synchronize')
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
         run: ./gradlew lintDebug
 
       - name: Run Unit Tests
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.action != 'synchronize')
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
         run: ./gradlew testDebugUnitTest
 
       - name: Build Debug APK
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.action != 'synchronize')
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
         run: ./gradlew assembleDebug
 
       - name: Upload Debug APK
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.action != 'synchronize')
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
