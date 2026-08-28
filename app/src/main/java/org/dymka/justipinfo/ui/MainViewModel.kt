@@ -3,6 +3,8 @@ package org.dymka.justipinfo.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,8 +37,11 @@ class MainViewModel(
     fun onRequestClicked() {
         viewModelScope.launch {
             _isLoading.value = true
-            _logs.value = repository.getAndLogIpInfo()
-            _isLoading.value = false
+            try {
+                _logs.value = repository.getAndLogIpInfo()
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -61,16 +66,13 @@ class MainViewModel(
     fun resetBaseUrl() {
         updateBaseUrl(AppRepository.DEFAULT_URL)
     }
-}
 
-class MainViewModelFactory(
-    private val repository: AppRepository,
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return MainViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    companion object {
+        fun factory(repository: AppRepository): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    MainViewModel(repository)
+                }
+            }
     }
 }

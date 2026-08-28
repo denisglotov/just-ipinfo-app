@@ -10,6 +10,7 @@ local.properties
 *.iml
 .DS_Store
 kls_database.db
+*.log
 
 # Keystore files
 *.jks

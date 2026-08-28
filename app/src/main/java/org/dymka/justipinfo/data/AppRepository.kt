@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 class AppRepository(
     private val ipService: IpService,
     private val logger: Logger,
-    private val context: Context,
+    context: Context,
 ) {
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
@@ -33,7 +33,6 @@ class AppRepository(
     suspend fun deleteLogEntry(index: Int): List<String> =
         withContext(Dispatchers.IO) {
             logger.deleteLogEntry(index)
-            logger.readLogEntries()
         }
 
     fun isDarkTheme(): Boolean = prefs.getBoolean(KEY_DARK_THEME, true)
@@ -42,7 +41,7 @@ class AppRepository(
         prefs.edit { putBoolean(KEY_DARK_THEME, isDark) }
     }
 
-    fun getBaseUrl(): String = prefs.getString(KEY_BASE_URL, DEFAULT_URL)!!
+    fun getBaseUrl(): String = prefs.getString(KEY_BASE_URL, DEFAULT_URL) ?: DEFAULT_URL
 
     fun setBaseUrl(url: String) {
         prefs.edit { putString(KEY_BASE_URL, url) }

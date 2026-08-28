@@ -26,7 +26,7 @@ class Logger(
         }
     }
 
-    fun readLogs(): String {
+    private fun readLogs(): String {
         val file = getFile()
         return if (file.exists()) {
             file.readText()
@@ -37,7 +37,7 @@ class Logger(
 
     fun readLogEntries(): List<String> = parseLogEntries(readLogs())
 
-    fun writeLogEntries(entries: List<String>) {
+    private fun writeLogEntries(entries: List<String>) {
         val newContent =
             if (entries.isEmpty()) {
                 ""
@@ -53,9 +53,10 @@ class Logger(
         }
     }
 
-    fun deleteLogEntry(index: Int) {
+    fun deleteLogEntry(index: Int): List<String> {
         val updated = removeLogEntry(readLogEntries(), index)
         writeLogEntries(updated)
+        return updated
     }
 
     fun clearLogs() {

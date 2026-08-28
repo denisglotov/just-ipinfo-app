@@ -20,9 +20,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings
@@ -73,12 +74,13 @@ class MainActivity : ComponentActivity() {
         val logger = Logger(applicationContext)
         val ipService = IpService()
         val repository = AppRepository(ipService, logger, applicationContext)
-        val viewModelFactory = MainViewModelFactory(repository)
 
         setContent {
-            val viewModel: MainViewModel = viewModel(factory = viewModelFactory)
+            val viewModel: MainViewModel = viewModel(factory = MainViewModel.factory(repository))
             val isDarkTheme by viewModel.isDarkTheme.collectAsState()
             val baseUrl by viewModel.baseUrl.collectAsState()
+            val logs by viewModel.logs.collectAsState()
+            val isLoading by viewModel.isLoading.collectAsState()
 
             LaunchedEffect(isDarkTheme) {
                 val barStyle =
@@ -102,11 +104,16 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     MainScreen(
-                        viewModel = viewModel,
+                        logs = logs,
+                        isLoading = isLoading,
                         isDarkTheme = isDarkTheme,
-                        onThemeToggle = { viewModel.toggleDarkTheme(it) },
                         baseUrl = baseUrl,
-                        onBaseUrlChange = { viewModel.updateBaseUrl(it) },
+                        onRequestClicked = viewModel::onRequestClicked,
+                        onClearClicked = viewModel::onClearClicked,
+                        onDeleteLogEntry = viewModel::onDeleteLogEntry,
+                        onThemeToggle = viewModel::toggleDarkTheme,
+                        onBaseUrlChange = viewModel::updateBaseUrl,
+                        onResetBaseUrl = viewModel::resetBaseUrl,
                     )
                 }
             }
@@ -116,25 +123,32 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel,
+    logs: List<String>,
+    isLoading: Boolean,
     isDarkTheme: Boolean,
-    onThemeToggle: (Boolean) -> Unit,
     baseUrl: String,
+    onRequestClicked: () -> Unit,
+    onClearClicked: () -> Unit,
+    onDeleteLogEntry: (Int) -> Unit,
+    onThemeToggle: (Boolean) -> Unit,
     onBaseUrlChange: (String) -> Unit,
+    onResetBaseUrl: () -> Unit,
 ) {
-    val logs by viewModel.logs.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val scrollState = rememberScrollState()
+    val listState = rememberLazyListState()
     var showDialog by remember { mutableStateOf(false) }
 
     // Scroll to bottom when logs change
-    LaunchedEffect(logs) { scrollState.animateScrollTo(scrollState.maxValue) }
+    LaunchedEffect(logs.size) {
+        if (logs.isNotEmpty()) {
+            listState.animateScrollToItem(logs.size - 1)
+        }
+    }
 
     if (showDialog) {
         SettingsDialog(
             baseUrl = baseUrl,
             onBaseUrlChange = onBaseUrlChange,
-            onResetBaseUrl = { viewModel.resetBaseUrl() },
+            onResetBaseUrl = onResetBaseUrl,
             isDarkTheme = isDarkTheme,
             onThemeToggle = onThemeToggle,
             onDismiss = { showDialog = false },
@@ -156,7 +170,7 @@ fun MainScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
-                    onClick = { viewModel.onRequestClicked() },
+                    onClick = onRequestClicked,
                     enabled = !isLoading,
                 ) {
                     if (isLoading) {
@@ -173,7 +187,7 @@ fun MainScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Button(
-                    onClick = { viewModel.onClearClicked() },
+                    onClick = onClearClicked,
                     enabled = !isLoading,
                     colors =
                         ButtonDefaults.buttonColors(
@@ -185,7 +199,7 @@ fun MainScreen(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Switch(
                     checked = isDarkTheme,
-                    onCheckedChange = { onThemeToggle(it) },
+                    onCheckedChange = onThemeToggle,
                     modifier = Modifier.scale(0.8f),
                     colors =
                         SwitchDefaults.colors(
@@ -223,8 +237,7 @@ fun MainScreen(
                     .background(
                         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                         shape = RoundedCornerShape(8.dp),
-                    ).padding(8.dp)
-                    .verticalScroll(scrollState),
+                    ).padding(8.dp),
         ) {
             if (logs.isEmpty()) {
                 Text(
@@ -238,8 +251,14 @@ fun MainScreen(
                 val context = LocalContext.current
                 val copiedMessage = stringResource(R.string.copied_to_clipboard)
 
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    logs.forEachIndexed { index, entry ->
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    itemsIndexed(
+                        items = logs,
+                        key = { index, _ -> index },
+                    ) { index, entry ->
                         if (index > 0) {
                             HorizontalDivider(
                                 modifier = Modifier.padding(vertical = 8.dp),
@@ -260,7 +279,7 @@ fun MainScreen(
                                 }
                             },
                             onDelete = {
-                                viewModel.onDeleteLogEntry(index)
+                                onDeleteLogEntry(index)
                             },
                         )
                     }

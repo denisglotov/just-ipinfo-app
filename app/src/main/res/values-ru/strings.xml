@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">JustIpInfo</string>
     <string name="settings_title">Настройки</string>
-    <string name="service_endpoint_label">Эндпоинт сервиса</string>
+    <string name="service_endpoint_label">Используемый сервер</string>
     <string name="presets_label">Пресеты</string>
     <string name="appearance_label">Внешний вид</string>
     <string name="dark_theme_title">Тёмная тема</string>

@@ -57,17 +57,16 @@ import org.dymka.justipinfo.data.AppRepository
 data class PresetEndpoint(
     val name: String,
     val url: String,
-    val format: String,
 )
 
 val PRESET_ENDPOINTS =
     listOf(
-        PresetEndpoint(name = "ipinfo.io", url = "https://ipinfo.io/json", format = "JSON"),
-        PresetEndpoint(name = "icanhazip", url = "https://icanhazip.com", format = "Plain"),
-        PresetEndpoint(name = "api.ipify.org", url = "https://api.ipify.org", format = "Plain"),
-        PresetEndpoint(name = "AWS checkip", url = "https://checkip.amazonaws.com", format = "Plain"),
-        PresetEndpoint(name = "ident.me", url = "https://ident.me", format = "Plain"),
-        PresetEndpoint(name = "ifconfig.co", url = "https://ifconfig.co/json", format = "JSON"),
+        PresetEndpoint(name = "ipinfo.io", url = "https://ipinfo.io/json"),
+        PresetEndpoint(name = "icanhazip", url = "https://icanhazip.com"),
+        PresetEndpoint(name = "api.ipify.org", url = "https://api.ipify.org"),
+        PresetEndpoint(name = "AWS checkip", url = "https://checkip.amazonaws.com"),
+        PresetEndpoint(name = "ident.me", url = "https://ident.me"),
+        PresetEndpoint(name = "ifconfig.co", url = "https://ifconfig.co/json"),
     )
 
 @OptIn(ExperimentalLayoutApi::class)
