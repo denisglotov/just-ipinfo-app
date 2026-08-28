@@ -1,6 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
