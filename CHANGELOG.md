@@ -6,8 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] - 2026-08-28
 
 ### Added
+- **Log Actions:** Added copy-to-clipboard and per-entry delete actions with an overflow menu next to every log entry.
 - **Settings Dialog:** Redesigned the settings pane with a modern Material 3 layout, categorized sections, interactive preset chips with active endpoint indicators, real-time URL validation, and an app information card.
-- **Localization:** Added localized strings for the redesigned settings pane across all supported locales (de, es, fr, ja, ko, ru, zh, zh-rCN).
+- **Localization:** Added localized strings for log actions and the redesigned settings pane across all supported locales (de, es, fr, ja, ko, ru, zh).
 
 ### Changed
 - **UI Architecture:** Extracted settings interface into a dedicated, modular `SettingsDialog` composable.

@@ -18,7 +18,7 @@ class Logger(
             LocalDateTime.now().format(
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME,
             )
-        val entry = "[$timestamp] $message\n-------------------\n"
+        val entry = "[$timestamp] $message\n$ENTRY_SEPARATOR\n"
         try {
             getFile().appendText(entry)
         } catch (e: IOException) {
@@ -35,10 +35,55 @@ class Logger(
         }
     }
 
+    fun readLogEntries(): List<String> = parseLogEntries(readLogs())
+
+    fun writeLogEntries(entries: List<String>) {
+        val newContent =
+            if (entries.isEmpty()) {
+                ""
+            } else {
+                entries.joinToString(separator = "") { entry ->
+                    "$entry\n$ENTRY_SEPARATOR\n"
+                }
+            }
+        try {
+            getFile().writeText(newContent)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun deleteLogEntry(index: Int) {
+        val updated = removeLogEntry(readLogEntries(), index)
+        writeLogEntries(updated)
+    }
+
     fun clearLogs() {
         val file = getFile()
         if (file.exists()) {
             file.writeText("")
+        }
+    }
+
+    companion object {
+        const val ENTRY_SEPARATOR = "-------------------"
+
+        fun parseLogEntries(content: String): List<String> {
+            if (content.isBlank()) return emptyList()
+            return content
+                .split(ENTRY_SEPARATOR)
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+        }
+
+        fun removeLogEntry(
+            entries: List<String>,
+            index: Int,
+        ): List<String> {
+            if (index !in entries.indices) return entries
+            val mutable = entries.toMutableList()
+            mutable.removeAt(index)
+            return mutable
         }
     }
 }

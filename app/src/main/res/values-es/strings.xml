@@ -21,4 +21,8 @@
     <string name="settings_button">Ajustes</string>
     <string name="logs_label">Registros:</string>
     <string name="no_logs_yet">Aún no hay registros.</string>
+    <string name="copy_log_entry">Copiar entrada del registro</string>
+    <string name="copied_to_clipboard">Copiado al portapapeles</string>
+    <string name="more_options">Más opciones</string>
+    <string name="delete_log_entry">Eliminar esta entrada de registro</string>
 </resources>

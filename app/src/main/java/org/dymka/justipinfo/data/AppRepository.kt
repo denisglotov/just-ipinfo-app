@@ -12,22 +12,28 @@ class AppRepository(
 ) {
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    suspend fun getAndLogIpInfo(): String =
+    suspend fun getAndLogIpInfo(): List<String> =
         withContext(Dispatchers.IO) {
             val result = ipService.fetchIpInfo(getBaseUrl())
             logger.appendLog(result)
-            logger.readLogs() // Return updated logs
+            logger.readLogEntries()
         }
 
-    suspend fun getLogs(): String =
+    suspend fun getLogs(): List<String> =
         withContext(Dispatchers.IO) {
-            logger.readLogs()
+            logger.readLogEntries()
         }
 
-    suspend fun clearLogs(): String =
+    suspend fun clearLogs(): List<String> =
         withContext(Dispatchers.IO) {
             logger.clearLogs()
-            ""
+            emptyList()
+        }
+
+    suspend fun deleteLogEntry(index: Int): List<String> =
+        withContext(Dispatchers.IO) {
+            logger.deleteLogEntry(index)
+            logger.readLogEntries()
         }
 
     fun isDarkTheme(): Boolean = prefs.getBoolean(KEY_DARK_THEME, true)

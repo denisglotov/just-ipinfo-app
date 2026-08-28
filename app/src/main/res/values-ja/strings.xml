@@ -21,4 +21,8 @@
     <string name="settings_button">設定</string>
     <string name="logs_label">ログ:</string>
     <string name="no_logs_yet">ログはまだありません。</string>
+    <string name="copy_log_entry">ログエントリをコピー</string>
+    <string name="copied_to_clipboard">クリップボードにコピーしました</string>
+    <string name="more_options">その他のオプション</string>
+    <string name="delete_log_entry">このログエントリを削除</string>
 </resources>

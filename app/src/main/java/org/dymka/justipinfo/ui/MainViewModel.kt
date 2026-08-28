@@ -12,8 +12,8 @@ import org.dymka.justipinfo.data.AppRepository
 class MainViewModel(
     private val repository: AppRepository,
 ) : ViewModel() {
-    private val _logs = MutableStateFlow("")
-    val logs: StateFlow<String> = _logs.asStateFlow()
+    private val _logs = MutableStateFlow<List<String>>(emptyList())
+    val logs: StateFlow<List<String>> = _logs.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -42,6 +42,10 @@ class MainViewModel(
 
     fun onClearClicked() {
         viewModelScope.launch { _logs.value = repository.clearLogs() }
+    }
+
+    fun onDeleteLogEntry(index: Int) {
+        viewModelScope.launch { _logs.value = repository.deleteLogEntry(index) }
     }
 
     fun toggleDarkTheme(isDark: Boolean) {
