@@ -46,6 +46,6 @@ class AppRepository(
         private const val PREFS_NAME = "settings"
         private const val KEY_DARK_THEME = "dark_theme"
         private const val KEY_BASE_URL = "base_url"
-        private const val DEFAULT_URL = "https://ipinfo.io/json"
+        const val DEFAULT_URL = "https://ipinfo.io/json"
     }
 }

@@ -4,6 +4,17 @@
     <string name="settings_title">设置</string>
     <string name="version_format">版本：%1$s</string>
     <string name="service_url_label">服务 URL：</string>
+    <string name="service_endpoint_label">服务接口</string>
+    <string name="presets_label">预设选项</string>
+    <string name="appearance_label">外观</string>
+    <string name="dark_theme_title">深色主题</string>
+    <string name="dark_theme_subtitle">启用深色模式</string>
+    <string name="about_title">关于</string>
+    <string name="app_description">简洁快速的 IP 信息查询工具</string>
+    <string name="custom_url_hint">https://example.com/json</string>
+    <string name="invalid_url_warning">URL 必须以 http:// 或 https:// 开头</string>
+    <string name="reset_to_default">重置</string>
+    <string name="done_button">完成</string>
     <string name="confirm_button">确认</string>
     <string name="request_button">请求</string>
     <string name="clear_button">清除</string>

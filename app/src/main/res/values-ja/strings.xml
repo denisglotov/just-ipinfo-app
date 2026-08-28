@@ -4,6 +4,17 @@
     <string name="settings_title">設定</string>
     <string name="version_format">バージョン: %1$s</string>
     <string name="service_url_label">サービスURL:</string>
+    <string name="service_endpoint_label">サービスエンドポイント</string>
+    <string name="presets_label">プリセット</string>
+    <string name="appearance_label">外観</string>
+    <string name="dark_theme_title">ダークテーマ</string>
+    <string name="dark_theme_subtitle">ダークモードを有効にする</string>
+    <string name="about_title">アプリ情報</string>
+    <string name="app_description">シンプルで高速なIP情報取得ツール</string>
+    <string name="custom_url_hint">https://example.com/json</string>
+    <string name="invalid_url_warning">URLはhttp://またはhttps://で始まる必要があります</string>
+    <string name="reset_to_default">リセット</string>
+    <string name="done_button">完了</string>
     <string name="confirm_button">確認</string>
     <string name="request_button">リクエスト</string>
     <string name="clear_button">クリア</string>

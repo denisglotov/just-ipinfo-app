@@ -4,6 +4,17 @@
     <string name="settings_title">Paramètres</string>
     <string name="version_format">Version : %1$s</string>
     <string name="service_url_label">URL du service :</string>
+    <string name="service_endpoint_label">Point de terminaison</string>
+    <string name="presets_label">Préréglages</string>
+    <string name="appearance_label">Apparence</string>
+    <string name="dark_theme_title">Thème sombre</string>
+    <string name="dark_theme_subtitle">Activer le mode sombre</string>
+    <string name="about_title">À propos</string>
+    <string name="app_description">Utilitaire simple et rapide de recherche d\'adresse IP</string>
+    <string name="custom_url_hint">https://example.com/json</string>
+    <string name="invalid_url_warning">L\'URL doit commencer par http:// ou https://</string>
+    <string name="reset_to_default">Réinitialiser</string>
+    <string name="done_button">Terminé</string>
     <string name="confirm_button">Confirmer</string>
     <string name="request_button">Requête</string>
     <string name="clear_button">Effacer</string>

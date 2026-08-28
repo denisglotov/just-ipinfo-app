@@ -4,6 +4,17 @@
     <string name="settings_title">Einstellungen</string>
     <string name="version_format">Version: %1$s</string>
     <string name="service_url_label">Dienst-URL:</string>
+    <string name="service_endpoint_label">Dienst-Endpunkt</string>
+    <string name="presets_label">Voreinstellungen</string>
+    <string name="appearance_label">Erscheinungsbild</string>
+    <string name="dark_theme_title">Dunkles Design</string>
+    <string name="dark_theme_subtitle">Dunklen Modus aktivieren</string>
+    <string name="about_title">Über die App</string>
+    <string name="app_description">Einfaches und schnelles Tool zur IP-Abfrage</string>
+    <string name="custom_url_hint">https://example.com/json</string>
+    <string name="invalid_url_warning">URL muss mit http:// oder https:// beginnen</string>
+    <string name="reset_to_default">Zurücksetzen</string>
+    <string name="done_button">Fertig</string>
     <string name="confirm_button">Bestätigen</string>
     <string name="request_button">Abfragen</string>
     <string name="clear_button">Löschen</string>

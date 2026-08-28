@@ -4,6 +4,17 @@
     <string name="settings_title">Settings</string>
     <string name="version_format">Version: %1$s</string>
     <string name="service_url_label">Service URL:</string>
+    <string name="service_endpoint_label">Service Endpoint</string>
+    <string name="presets_label">Presets</string>
+    <string name="appearance_label">Appearance</string>
+    <string name="dark_theme_title">Dark Theme</string>
+    <string name="dark_theme_subtitle">Enable dark color scheme</string>
+    <string name="about_title">About</string>
+    <string name="app_description">Minimalist IP address lookup tool</string>
+    <string name="custom_url_hint">https://example.com/json</string>
+    <string name="invalid_url_warning">URL must start with http:// or https://</string>
+    <string name="reset_to_default">Reset</string>
+    <string name="done_button">Done</string>
     <string name="confirm_button">Confirm</string>
     <string name="request_button">Request</string>
     <string name="clear_button">Clear</string>

@@ -53,6 +53,10 @@ class MainViewModel(
         _baseUrl.value = url
         repository.setBaseUrl(url)
     }
+
+    fun resetBaseUrl() {
+        updateBaseUrl(AppRepository.DEFAULT_URL)
+    }
 }
 
 class MainViewModelFactory(

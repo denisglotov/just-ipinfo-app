@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,21 +21,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,22 +46,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.dymka.justipinfo.BuildConfig
 import org.dymka.justipinfo.R
 import org.dymka.justipinfo.data.AppRepository
 import org.dymka.justipinfo.data.IpService
 import org.dymka.justipinfo.data.Logger
 import org.dymka.justipinfo.ui.theme.JustIpInfoTheme
-
-private val PRESET_URLS =
-    listOf(
-        "https://api.ipify.org",
-        "https://checkip.amazonaws.com",
-        "https://icanhazip.com",
-        "https://ident.me",
-        "https://ifconfig.co/json",
-        "https://ipinfo.io/json",
-    )
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,56 +119,13 @@ fun MainScreen(
     LaunchedEffect(logs) { scrollState.animateScrollTo(scrollState.maxValue) }
 
     if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text(stringResource(R.string.settings_title)) },
-            text = {
-                Column {
-                    Text(
-                        stringResource(R.string.version_format, BuildConfig.VERSION_NAME),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        stringResource(R.string.service_url_label),
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                    OutlinedTextField(
-                        value = baseUrl,
-                        onValueChange = onBaseUrlChange,
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        textStyle = MaterialTheme.typography.bodySmall,
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Column {
-                        PRESET_URLS.forEach { url ->
-                            androidx.compose.runtime.key(url) {
-                                TextButton(
-                                    onClick = { onBaseUrlChange(url) },
-                                    contentPadding = PaddingValues(0.dp),
-                                    modifier = Modifier.height(32.dp),
-                                ) {
-                                    Text(
-                                        text = url,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.primary,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                IconButton(onClick = { showDialog = false }) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = stringResource(R.string.confirm_button),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            },
+        SettingsDialog(
+            baseUrl = baseUrl,
+            onBaseUrlChange = onBaseUrlChange,
+            onResetBaseUrl = { viewModel.resetBaseUrl() },
+            isDarkTheme = isDarkTheme,
+            onThemeToggle = onThemeToggle,
+            onDismiss = { showDialog = false },
         )
     }
 
