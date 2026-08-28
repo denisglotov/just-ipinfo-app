@@ -1,0 +1,4 @@
+- Obtención de detalles de IP desde ipinfo.io.
+- Registro automático de solicitudes con marcas de tiempo.
+- Ver y limpiar registros en la aplicación.
+- Interfaz limpia con Material Design 3.

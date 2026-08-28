@@ -1,0 +1,4 @@
+- IP-Details von ipinfo.io abrufen.
+- Automatische Protokollierung von Anfragen mit Zeitstempeln.
+- Protokolle in der App anzeigen und löschen.
+- Klare Material Design 3 Benutzeroberfläche.

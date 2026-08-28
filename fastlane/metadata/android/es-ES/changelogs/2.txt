@@ -1,0 +1,3 @@
+- Añadido soporte para temas claro y oscuro.
+- Añadidas URL de servicio IP configurables con ajustes preestablecidos.
+- Mejora en el diseño de la interfaz y gestión de errores.

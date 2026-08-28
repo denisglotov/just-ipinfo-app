@@ -1,0 +1,3 @@
+- Unterstützung für helle und dunkle Designs hinzugefügt.
+- Konfigurierbare IP-Dienst-URLs mit Voreinstellungen hinzugefügt.
+- Verbessertes UI-Layout und verbesserte Fehlerbehandlung.

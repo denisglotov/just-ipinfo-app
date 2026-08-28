@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JustIpInfo</string>
+    <string name="settings_title">Настройки</string>
+    <string name="version_format">Версия: %1$s</string>
+    <string name="service_url_label">URL сервиса:</string>
+    <string name="confirm_button">Подтвердить</string>
+    <string name="request_button">Запрос</string>
+    <string name="clear_button">Очистить</string>
+    <string name="settings_button">Настройки</string>
+    <string name="logs_label">Журнал:</string>
+    <string name="no_logs_yet">Логов пока нет.</string>
+</resources>

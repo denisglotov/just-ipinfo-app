@@ -1,0 +1,7 @@
+Just IP Info ist eine minimalistische Android-Anwendung, die IP-Informationen von verschiedenen Anbietern abruft.
+
+Funktionen:
+- Konfigurierbare Quellen: Rufen Sie Daten von ipinfo.io oder einer beliebigen benutzerdefinierten URL mit schnellen Voreinstellungen ab.
+- Helle und dunkle Designs: Vollständige Unterstützung für beide Themes mit dauerhafter Umschaltung.
+- Dauerhafte Protokollierung: Speichert jedes Abfrageergebnis (oder Fehler) mit einem Zeitstempel in einer internen Protokolldatei.
+- Protokollverwaltung: Sofortige Anzeige der Protokolle in der Benutzeroberfläche mit einer „Löschen“-Funktion.

@@ -47,10 +47,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.dymka.justipinfo.BuildConfig
+import org.dymka.justipinfo.R
 import org.dymka.justipinfo.data.AppRepository
 import org.dymka.justipinfo.data.IpService
 import org.dymka.justipinfo.data.Logger
@@ -135,12 +137,18 @@ fun MainScreen(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text("Settings") },
+            title = { Text(stringResource(R.string.settings_title)) },
             text = {
                 Column {
-                    Text("Version: ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
+                    Text(
+                        stringResource(R.string.version_format, BuildConfig.VERSION_NAME),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("Service URL:", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        stringResource(R.string.service_url_label),
+                        style = MaterialTheme.typography.labelLarge,
+                    )
                     OutlinedTextField(
                         value = baseUrl,
                         onValueChange = onBaseUrlChange,
@@ -172,7 +180,7 @@ fun MainScreen(
                 IconButton(onClick = { showDialog = false }) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "Confirm",
+                        contentDescription = stringResource(R.string.confirm_button),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
@@ -206,7 +214,7 @@ fun MainScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }
-                    Text("Request")
+                    Text(stringResource(R.string.request_button))
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -218,7 +226,7 @@ fun MainScreen(
                         ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error,
                         ),
-                ) { Text("Clear") }
+                ) { Text(stringResource(R.string.clear_button)) }
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -238,7 +246,7 @@ fun MainScreen(
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
                         imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings",
+                        contentDescription = stringResource(R.string.settings_button),
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
@@ -247,7 +255,7 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Logs:",
+            text = stringResource(R.string.logs_label),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
         )
@@ -264,7 +272,7 @@ fun MainScreen(
                     .verticalScroll(scrollState),
         ) {
             Text(
-                text = logs.ifEmpty { "No logs yet." },
+                text = logs.ifEmpty { stringResource(R.string.no_logs_yet) },
                 fontFamily = FontFamily.Monospace,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onBackground,

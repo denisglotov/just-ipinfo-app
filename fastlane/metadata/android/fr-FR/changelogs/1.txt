@@ -1,0 +1,4 @@
+- Récupérer les détails IP depuis ipinfo.io.
+- Journaliser automatiquement les requêtes avec horodatage.
+- Afficher et effacer les journaux dans l'application.
+- Interface Material Design 3 épurée.
