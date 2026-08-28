@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-08-28
+
+### Changed
+- **Build Configuration:** Configured `ndk.debugSymbolLevel = "FULL"` to bundle native debug symbols directly within the release App Bundle for Google Play Console.
+- **UI:** Migrated from deprecated `LocalClipboardManager` to `LocalClipboard` with coroutines for copy actions.
+
 ## [1.3.0] - 2026-08-28
 
 ### Added

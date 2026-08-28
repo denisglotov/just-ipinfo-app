@@ -1,5 +1,6 @@
 package org.dymka.justipinfo.ui
 
+import android.content.ClipData
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -48,17 +49,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import org.dymka.justipinfo.R
 import org.dymka.justipinfo.data.AppRepository
 import org.dymka.justipinfo.data.IpService
@@ -247,7 +250,8 @@ fun MainScreen(
                     color = MaterialTheme.colorScheme.onBackground,
                 )
             } else {
-                val clipboardManager = LocalClipboardManager.current
+                val clipboard = LocalClipboard.current
+                val coroutineScope = rememberCoroutineScope()
                 val context = LocalContext.current
                 val copiedMessage = stringResource(R.string.copied_to_clipboard)
 
@@ -268,7 +272,16 @@ fun MainScreen(
                         LogEntryItem(
                             entry = entry,
                             onCopy = {
-                                clipboardManager.setText(AnnotatedString(entry))
+                                coroutineScope.launch {
+                                    clipboard.setClipEntry(
+                                        ClipEntry(
+                                            ClipData.newPlainText(
+                                                "IP Info Log",
+                                                entry,
+                                            ),
+                                        ),
+                                    )
+                                }
                                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                                     Toast
                                         .makeText(
