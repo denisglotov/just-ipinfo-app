@@ -1,3 +1,0 @@
-- Ajout de la prise en charge des thèmes clair et sombre.
-- Ajout d'URL de service IP configurables avec des préréglages.
-- Amélioration de la disposition de l'interface et de la gestion des erreurs.
