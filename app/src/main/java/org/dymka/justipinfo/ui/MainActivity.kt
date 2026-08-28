@@ -47,7 +47,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,7 +63,6 @@ private val PRESET_URLS =
         "https://icanhazip.com",
         "https://ident.me",
         "https://ifconfig.co/json",
-        "https://ifconfig.me",
         "https://ipinfo.io/json",
     )
 
@@ -130,7 +128,6 @@ fun MainScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val scrollState = rememberScrollState()
     var showDialog by remember { mutableStateOf(false) }
-    val uriHandler = LocalUriHandler.current
 
     // Scroll to bottom when logs change
     LaunchedEffect(logs) { scrollState.animateScrollTo(scrollState.maxValue) }
@@ -169,15 +166,6 @@ fun MainScreen(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
-                    TextButton(
-                        onClick = {
-                            uriHandler.openUri(
-                                "https://github.com/denisglotov/just-ipinfo-app",
-                            )
-                        },
-                        contentPadding = PaddingValues(0.dp),
-                    ) { Text("Source Code") }
                 }
             },
             confirmButton = {
