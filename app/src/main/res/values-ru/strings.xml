@@ -2,8 +2,6 @@
 <resources>
     <string name="app_name">JustIpInfo</string>
     <string name="settings_title">Настройки</string>
-    <string name="version_format">Версия: %1$s</string>
-    <string name="service_url_label">URL сервиса:</string>
     <string name="service_endpoint_label">Эндпоинт сервиса</string>
     <string name="presets_label">Пресеты</string>
     <string name="appearance_label">Внешний вид</string>
@@ -15,7 +13,6 @@
     <string name="invalid_url_warning">URL должен начинаться с http:// или https://</string>
     <string name="reset_to_default">Сбросить</string>
     <string name="done_button">Готово</string>
-    <string name="confirm_button">Подтвердить</string>
     <string name="request_button">Запрос</string>
     <string name="clear_button">Очистить</string>
     <string name="settings_button">Настройки</string>

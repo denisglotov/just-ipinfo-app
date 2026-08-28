@@ -236,6 +236,7 @@ fun MainScreen(
             } else {
                 val clipboardManager = LocalClipboardManager.current
                 val context = LocalContext.current
+                val copiedMessage = stringResource(R.string.copied_to_clipboard)
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     logs.forEachIndexed { index, entry ->
@@ -253,7 +254,7 @@ fun MainScreen(
                                     Toast
                                         .makeText(
                                             context,
-                                            context.getString(R.string.copied_to_clipboard),
+                                            copiedMessage,
                                             Toast.LENGTH_SHORT,
                                         ).show()
                                 }
