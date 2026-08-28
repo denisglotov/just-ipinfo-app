@@ -3,7 +3,7 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.0] - 2026-08-28
 
 ### Added
 - **Settings Dialog:** Redesigned the settings pane with a modern Material 3 layout, categorized sections, interactive preset chips with active endpoint indicators, real-time URL validation, and an app information card.
@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **UI Architecture:** Extracted settings interface into a dedicated, modular `SettingsDialog` composable.
+- **Dependencies Updated:** Upgraded Android Gradle Plugin (AGP) to 8.13.0 and AndroidX Core KTX to 1.18.0.
 
 ## [1.2.0] - 2026-08-04
 
