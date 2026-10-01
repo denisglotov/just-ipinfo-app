@@ -83,9 +83,11 @@ fun SettingsDialog(
     val focusManager = LocalFocusManager.current
     val isInvalidUrl =
         remember(baseUrl) {
-            baseUrl.isNotBlank() &&
-                !baseUrl.startsWith("http://", ignoreCase = true) &&
-                !baseUrl.startsWith("https://", ignoreCase = true)
+            baseUrl.isBlank() ||
+                (
+                    !baseUrl.startsWith("http://", ignoreCase = true) &&
+                        !baseUrl.startsWith("https://", ignoreCase = true)
+                )
         }
     val isDefaultUrl = remember(baseUrl) { baseUrl.trim() == AppRepository.DEFAULT_URL }
 
@@ -126,7 +128,7 @@ fun SettingsDialog(
                     onValueChange = onBaseUrlChange,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    isError = isInvalidUrl,
+                    isError = baseUrl.isNotEmpty() && isInvalidUrl,
                     placeholder = {
                         Text(
                             text = stringResource(R.string.custom_url_hint),
@@ -138,7 +140,7 @@ fun SettingsDialog(
                             imageVector = Icons.Outlined.Http,
                             contentDescription = null,
                             tint =
-                                if (isInvalidUrl) {
+                                if (baseUrl.isNotEmpty() && isInvalidUrl) {
                                     MaterialTheme.colorScheme.error
                                 } else {
                                     MaterialTheme.colorScheme.primary
@@ -156,7 +158,7 @@ fun SettingsDialog(
                         }
                     },
                     supportingText =
-                        if (isInvalidUrl) {
+                        if (baseUrl.isNotEmpty() && isInvalidUrl) {
                             {
                                 Text(
                                     text = stringResource(R.string.invalid_url_warning),
@@ -349,6 +351,7 @@ fun SettingsDialog(
         confirmButton = {
             Button(
                 onClick = onDismiss,
+                enabled = !isInvalidUrl,
                 shape = RoundedCornerShape(10.dp),
             ) {
                 Text(stringResource(R.string.done_button))

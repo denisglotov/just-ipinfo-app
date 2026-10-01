@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Localization:** Added Portuguese (`pt`) and Italian (`it`) translations for all UI strings and registered both locales in the Android per-app language configuration (`locales_config.xml`).
 
+### Fixed
+- **Thread Safety:** Synchronized log file operations in `Logger` to prevent race conditions
+  during concurrent coroutine access.
+- **Validation:** Fixed URL validation in `SettingsDialog` to treat empty or blank inputs as
+  invalid and disable the Done button until a valid URL is entered.
+- **UI:** Improved log list scroll behavior to scroll to the bottom only when appending new
+  entries, and scoped entry menu state properly so deleting an entry does not transfer an open
+  menu to its neighbor.
+
 ## [1.4.0] - 2026-10-01
 
 ### Fixed

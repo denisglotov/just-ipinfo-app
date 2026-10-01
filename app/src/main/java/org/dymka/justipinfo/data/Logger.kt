@@ -11,6 +11,7 @@ class Logger(
 ) {
     constructor(context: Context) : this(File(context.filesDir, LOG_FILE_NAME))
 
+    @Synchronized
     fun appendLog(message: String) {
         val timestamp =
             LocalDateTime.now().format(
@@ -33,6 +34,7 @@ class Logger(
      * Returns the persisted entries, or an empty list when the log cannot be read. A storage
      * failure must never escape into the caller's coroutine, where it would crash the app.
      */
+    @Synchronized
     fun readLogEntries(): List<String> {
         val content =
             try {
@@ -72,12 +74,14 @@ class Logger(
         }
     }
 
+    @Synchronized
     fun deleteLogEntry(index: Int): List<String> {
         val updated = removeLogEntry(readLogEntries(), index)
         writeLogEntries(updated)
         return updated
     }
 
+    @Synchronized
     fun clearLogs() {
         try {
             if (logFile.exists()) {

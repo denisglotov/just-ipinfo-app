@@ -47,6 +47,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -140,11 +141,13 @@ fun MainScreen(
     val listState = rememberLazyListState()
     var showDialog by remember { mutableStateOf(false) }
 
-    // Scroll to bottom when logs change
+    // Scroll to bottom only when new logs are added
+    var previousLogCount by remember { mutableIntStateOf(logs.size) }
     LaunchedEffect(logs.size) {
-        if (logs.isNotEmpty()) {
+        if (logs.size > previousLogCount && logs.isNotEmpty()) {
             listState.animateScrollToItem(logs.size - 1)
         }
+        previousLogCount = logs.size
     }
 
     if (showDialog) {
@@ -261,7 +264,6 @@ fun MainScreen(
                 ) {
                     itemsIndexed(
                         items = logs,
-                        key = { index, _ -> index },
                     ) { index, entry ->
                         if (index > 0) {
                             HorizontalDivider(
@@ -309,7 +311,7 @@ fun LogEntryItem(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showMenu by remember { mutableStateOf(false) }
+    var showMenu by remember(entry) { mutableStateOf(false) }
 
     Row(
         modifier = modifier.fillMaxWidth(),

@@ -254,4 +254,33 @@ class LoggerTest {
         assertEquals(list, Logger.removeLogEntry(list, -1))
         assertEquals(list, Logger.removeLogEntry(list, 5))
     }
+
+    @Test
+    fun appendLog_concurrentCalls_allEntriesArePersisted() {
+        val logger = newLogger()
+        val threadCount = 10
+        val entriesPerThread = 5
+        val latch = java.util.concurrent.CountDownLatch(threadCount)
+        val executor =
+            java.util.concurrent.Executors
+                .newFixedThreadPool(threadCount)
+
+        for (t in 0 until threadCount) {
+            executor.submit {
+                try {
+                    for (i in 0 until entriesPerThread) {
+                        logger.appendLog("thread-$t-entry-$i")
+                    }
+                } finally {
+                    latch.countDown()
+                }
+            }
+        }
+
+        assertTrue(latch.await(5, java.util.concurrent.TimeUnit.SECONDS))
+        executor.shutdown()
+
+        val saved = logger.readLogEntries()
+        assertEquals(threadCount * entriesPerThread, saved.size)
+    }
 }
