@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Localization:** Added Portuguese (`pt`) and Italian (`it`) translations for all UI strings and registered both locales in the Android per-app language configuration (`locales_config.xml`).
+
 ## [1.4.0] - 2026-10-01
 
 ### Fixed
