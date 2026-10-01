@@ -1,5 +1,15 @@
 # Just IP Info
 
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=org.dymka.justipinfo"
+    ><img
+      src="docs/assets/en_badge_web_generic.png"
+      alt="Get it on Google Play"
+      height="70"
+      align="middle"
+  /></a>
+</p>
+
 A minimalistic, Clean Code Android application that fetches IP information from various providers
 and maintains a timestamped log file.
 
