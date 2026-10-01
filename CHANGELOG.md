@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-10-01
+
+### Fixed
+- **Reliability:** Prevented stale results when the device switches networks (e.g. toggling a VPN) by disabling HTTP response caching and idle connection reuse in `IpService`. The client now sends `Cache-Control: no-cache, no-store` / `Pragma: no-cache`, uses an empty connection pool, and applies explicit connect/read/call timeouts.
+
 ## [1.3.1] - 2026-08-28
 
 ### Changed
