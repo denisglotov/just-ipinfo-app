@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -21,19 +20,18 @@ fun getSecret(
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ktlint)
 }
 
 android {
     namespace = "org.dymka.justipinfo"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "org.dymka.justipinfo"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 7
         versionName = "1.4.0"
 
@@ -47,11 +45,20 @@ android {
             val alias = getSecret("KEY_ALIAS", "RELEASE_KEY_ALIAS")
             val keyPass = getSecret("KEY_PASSWORD", "RELEASE_KEY_PASSWORD") ?: storePass
 
-            if (!storeFilePath.isNullOrEmpty()) {
+            if (!storeFilePath.isNullOrBlank() &&
+                file(storeFilePath).exists() &&
+                !storePass.isNullOrBlank() &&
+                !alias.isNullOrBlank()
+            ) {
                 storeFile = file(storeFilePath)
                 storePassword = storePass
                 keyAlias = alias
                 keyPassword = keyPass
+            } else {
+                storeFile = file("${System.getProperty("user.home")}/.android/debug.keystore")
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
             }
         }
     }
@@ -60,14 +67,11 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            val releaseSigning = signingConfigs.getByName("release")
-            if (releaseSigning.storeFile?.exists() == true) {
-                signingConfig = releaseSigning
-            }
             ndk {
                 debugSymbolLevel = "FULL"
             }
@@ -83,12 +87,23 @@ android {
         buildConfig = true
     }
     packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
+
+    lint {
+        abortOnError = true
+        checkAllWarnings = true
+        warningsAsErrors = false
+        checkDependencies = true
+    }
 }
 
 kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
+    jvmToolchain(17)
+}
+
+ktlint {
+    version.set(libs.versions.ktlint)
+    android.set(true)
+    outputToConsole.set(true)
 }
 
 androidComponents {
@@ -98,10 +113,13 @@ androidComponents {
 }
 
 dependencies {
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
@@ -117,7 +135,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
